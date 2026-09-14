@@ -6,6 +6,10 @@ const pool = require("./db");
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
 // Create a todo
 app.post("/todos", async (req, res) => {
   try {
