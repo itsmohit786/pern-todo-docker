@@ -1,23 +1,12 @@
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const pool = require("./db");
 
-const app = express();
-
-// --- MIDDLEWARE ---
-const corsOptions = {
-  origin: "http://localhost:3000",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
-// --- ROUTES ---
-
-// 1. Create a todo
+// Create a todo
 app.post("/todos", async (req, res) => {
   try {
     const { description } = req.body;
@@ -32,13 +21,10 @@ app.post("/todos", async (req, res) => {
   }
 });
 
-// 2. Get all todos
+// Get all todos
 app.get("/todos", async (req, res) => {
-  console.log("This is working!");
   try {
-    const allTodos = await pool.query(
-      "SELECT * FROM todo ORDER BY todo_id ASC",
-    );
+    const allTodos = await pool.query("SELECT * FROM todo");
     res.json(allTodos.rows);
   } catch (err) {
     console.error(err.message);
@@ -46,23 +32,7 @@ app.get("/todos", async (req, res) => {
   }
 });
 
-// 3. Update a todo
-app.put("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { description } = req.body;
-    await pool.query("UPDATE todo SET description = $1 WHERE todo_id = $2", [
-      description,
-      id,
-    ]);
-    res.json("Todo was updated!");
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-});
-
-// 4. Delete a todo
+// Delete a todo
 app.delete("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -74,6 +44,6 @@ app.delete("/todos/:id", async (req, res) => {
   }
 });
 
-app.listen(3001, () => {
-  console.log("Server active on port 3001");
+app.listen(5000, () => {
+  console.log("Server is running on port 5000");
 });
