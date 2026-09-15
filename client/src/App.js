@@ -4,9 +4,11 @@ function App() {
   const [description, setDescription] = useState("");
   const [todos, setTodos] = useState([]);
 
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
+
   const getTodos = async () => {
     try {
-      const response = await fetch("http://localhost:5001/todos");
+      const response = await fetch(`${API_URL}/todos`);
       const jsonData = await response.json();
       setTodos(jsonData);
     } catch (err) {
@@ -22,7 +24,7 @@ function App() {
     e.preventDefault();
     try {
       const body = { description };
-      await fetch("http://localhost:5001/todos", {
+      await fetch(`${API_URL}/todos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -36,7 +38,7 @@ function App() {
 
   const deleteTodo = async (id) => {
     try {
-      await fetch(`http://localhost:5001/todos/${id}`, {
+      await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
       });
       setTodos(todos.filter((todo) => todo.todo_id !== id));

@@ -38,7 +38,10 @@ services:
       - pern-network
 
   client:
-    build: ./client
+    build:
+      context: ./client
+      args:
+        - REACT_APP_API_URL=http://3.25.68.244:5001
     container_name: pern_client
     restart: always
     ports:
